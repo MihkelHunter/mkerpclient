@@ -7,29 +7,52 @@ import (
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
+
+func createToolbar() *widget.Toolbar {
+	return widget.NewToolbar(
+		widget.NewToolbarAction(theme.ContentAddIcon(), func() {
+			// Add action
+		}),
+		widget.NewToolbarAction(theme.CheckButtonIcon(), func() {
+			// Edit action
+		}),
+		widget.NewToolbarAction(theme.DeleteIcon(), func() {
+			// Delete action
+		}),
+	)
+}
+
+func createTable(data [][]string) *widget.Table {
+	table := widget.NewTable(
+		func() (int, int) { return len(data), len(data[0]) },
+		func() fyne.CanvasObject { return widget.NewLabel("") },
+		func(id widget.TableCellID, o fyne.CanvasObject) {
+			o.(*widget.Label).SetText(data[id.Row][id.Col])
+		},
+	)
+	table.SetColumnWidth(0, 120)
+	table.SetColumnWidth(1, 120)
+	return table
+}
+
+func setWindowDefaults(w fyne.Window) {
+	w.SetMaster()
+	w.Resize(fyne.NewSize(800, 600))
+	w.SetFixedSize(false)
+	w.CenterOnScreen()
+	w.SetPadded(true)
+	w.SetIcon(theme.FyneLogo())
+}
 
 func main() {
 	myapp := app.New()
 	myWindow := myapp.NewWindow("Mkerp Client")
 	//myWindow.Resize(fyne.NewSize(800, 600))
-
-	mainContent := container.NewMax() // Use NewMax to allow child to fill all space
-
-	// Helper to create a table with minimum cell size
-	createTable := func(data [][]string) *widget.Table {
-		table := widget.NewTable(
-			func() (int, int) { return len(data), len(data[0]) },
-			func() fyne.CanvasObject { return widget.NewLabel("") },
-			func(id widget.TableCellID, o fyne.CanvasObject) {
-				o.(*widget.Label).SetText(data[id.Row][id.Col])
-			},
-		)
-		table.SetColumnWidth(0, 120)
-		table.SetColumnWidth(1, 120)
-		return table
-	}
+	setWindowDefaults(myWindow)
+	mainContent := container.NewStack()
 
 	showSales := func() {
 		data := [][]string{
@@ -40,7 +63,7 @@ func main() {
 		}
 		mainContent.Objects = []fyne.CanvasObject{
 			container.NewBorder(
-				canvas.NewText("Sales Data", color.White), // top
+				canvas.NewText("Sales Data", color.White),
 				nil, nil, nil,
 				createTable(data),
 			),
@@ -70,29 +93,33 @@ func main() {
 			{"Widget B", "20"},
 			{"Widget C", "0"},
 		}
+
 		mainContent.Objects = []fyne.CanvasObject{
+
 			container.NewBorder(
-				canvas.NewText("Inventory Data", color.White),
+				createToolbar(),
 				nil, nil, nil,
-				createTable(data),
+				container.NewBorder(
+					canvas.NewText("Inventory Data", color.White),
+					nil, nil, nil,
+					container.NewStack(createTable(data)),
+				),
 			),
 		}
+
 		mainContent.Refresh()
 	}
 
-	// Sidebar with buttons
 	sidebar := container.NewVBox(
 		widget.NewButton("Sales", func() { showSales() }),
 		widget.NewButton("Purchase", func() { showPurchase() }),
 		widget.NewButton("Inventory", func() { showInventory() }),
 	)
 
-	// Set initial content
 	showSales()
 
-	// Use HSplit for resizable sidebar
 	split := container.NewHSplit(sidebar, mainContent)
-	split.Offset = 0.2 // Sidebar takes 20% of the width
+	split.Offset = 0.2
 
 	myWindow.SetContent(split)
 	myWindow.ShowAndRun()
