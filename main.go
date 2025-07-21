@@ -11,6 +11,141 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+type CurrentMenuState struct {
+	CurrentMenuState string
+}
+
+var currentState = &CurrentMenuState{CurrentMenuState: "PurchaseOrders"}
+
+func showPurchase(mainContent *fyne.Container) {
+	purchData := [][]string{
+		{"Invoice #", "Amount"},
+		{"A100", "$300"},
+		{"A101", "$450"},
+		{"A102", "$200"},
+	}
+	supplierData := [][]string{
+		{"Supplier ID", "Name"},
+		{"C001", "Supplier A"},
+		{"C002", "Supplier B"},
+		{"C003", "Supplier C"},
+	}
+
+	purchaseTopBar := container.NewVBox(
+		widget.NewButton("Purchase Orders", func() { showPurchaseOrders(mainContent) }),
+		widget.NewButton("Suppliers", func() { showSuppliers(mainContent) }),
+	)
+
+	var data [][]string
+	var title string
+	if currentState.CurrentMenuState == "Suppliers" {
+		data = supplierData
+		title = "Supplier Data"
+	} else {
+		data = purchData
+		title = "Purchase Data"
+	}
+
+	mainContent.Objects = []fyne.CanvasObject{
+		container.NewBorder(
+			createToolbar(),
+			nil, nil, nil,
+			container.NewBorder(
+				purchaseTopBar,
+				nil, nil, nil,
+				container.NewBorder(
+					canvas.NewText(title, color.White),
+					nil, nil, nil,
+					container.NewVScroll(createTable(&data)),
+				),
+			),
+		),
+	}
+	mainContent.Refresh()
+}
+
+func showInventory(mainContent *fyne.Container) {
+	itemData := [][]string{
+		{"Item", "Stock"},
+		{"Widget A", "50"},
+		{"Widget B", "20"},
+		{"Widget C", "0"},
+	}
+
+	inventoryTopBar := container.NewVBox(
+		widget.NewButton("Stock Check", func() { showStockCheck(mainContent) }),
+		widget.NewButton("Add Item", func() { showAddItem(mainContent) }),
+	)
+
+	var data [][]string
+	var title string
+	if currentState.CurrentMenuState == "StockCheck" {
+		data = itemData
+		title = "Stock Check Data"
+	} else {
+		data = itemData
+		title = "Add Item Data"
+	}
+
+	mainContent.Objects = []fyne.CanvasObject{
+		container.NewBorder(
+			createToolbar(),
+			nil, nil, nil,
+			container.NewBorder(
+				inventoryTopBar,
+				nil, nil, nil,
+				container.NewBorder(
+					canvas.NewText(title, color.White),
+					nil, nil, nil,
+					container.NewVScroll(createTable(&data)),
+				),
+			),
+		),
+	}
+	mainContent.Refresh()
+}
+
+func showSales(mainContent *fyne.Container) {
+	salesData := [][]string{
+		{"Order #", "Amount"},
+		{"12345", "$1000"},
+		{"12346", "$500"},
+		{"12347", "$750"},
+	}
+
+	salesTopBar := container.NewVBox(
+		widget.NewButton("Sales Orders", func() { showSalesOrders(mainContent) }),
+		widget.NewButton("Client List", func() { showClientList(mainContent) }),
+	)
+
+	var data [][]string
+	var title string
+	if currentState.CurrentMenuState == "SalesOrders" {
+		data = salesData
+		title = "Sales Orders Data"
+	} else {
+		data = salesData
+		title = "Client List Data"
+	}
+
+	mainContent.Objects = []fyne.CanvasObject{
+		container.NewBorder(
+			createToolbar(),
+			nil, nil, nil,
+			container.NewBorder(
+				salesTopBar,
+				nil, nil, nil,
+				container.NewBorder(
+					canvas.NewText(title, color.White),
+					nil, nil, nil,
+					container.NewVScroll(createTable(&data)),
+				),
+			),
+		),
+	}
+	mainContent.Refresh()
+}
+
 func createToolbar() *widget.Toolbar {
 	return widget.NewToolbar(
 		widget.NewToolbarAction(theme.ContentAddIcon(), func() {
@@ -25,12 +160,19 @@ func createToolbar() *widget.Toolbar {
 	)
 }
 
-func createTable(data [][]string) *widget.Table {
+func createTable(data *[][]string) *widget.Table {
 	table := widget.NewTable(
-		func() (int, int) { return len(data), len(data[0]) },
-		func() fyne.CanvasObject { return widget.NewLabel("") },
+		func() (int, int) {
+			if len(*data) == 0 {
+				return 0, 0
+			}
+			return len(*data), len((*data)[0])
+		},
+		func() fyne.CanvasObject {
+			return widget.NewLabel("")
+		},
 		func(id widget.TableCellID, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(data[id.Row][id.Col])
+			o.(*widget.Label).SetText((*data)[id.Row][id.Col])
 		},
 	)
 	table.SetColumnWidth(0, 120)
@@ -47,83 +189,60 @@ func setWindowDefaults(w fyne.Window) {
 	w.SetIcon(theme.FyneLogo())
 }
 
+func showSalesOrders(mainContent *fyne.Container) {
+	print("Sales Orders button clicked\n")
+	currentState.CurrentMenuState = "SalesOrders"
+	showSales(mainContent)
+}
+
+func showClientList(mainContent *fyne.Container) {
+	print("Client List button clicked\n")
+	currentState.CurrentMenuState = "ClientList"
+	showSales(mainContent)
+}
+
+func showPurchaseOrders(mainContent *fyne.Container) {
+	print("Purchase Orders button clicked\n")
+	currentState.CurrentMenuState = "PurchaseOrders"
+	showPurchase(mainContent)
+}
+
+func showSuppliers(mainContent *fyne.Container) {
+	print("Suppliers button clicked\n")
+	currentState.CurrentMenuState = "Suppliers"
+	showPurchase(mainContent)
+}
+
+func showStockCheck(mainContent *fyne.Container) {
+	print("Stock Check button clicked\n")
+	currentState.CurrentMenuState = "StockCheck"
+	showInventory(mainContent)
+}
+
+func showAddItem(mainContent *fyne.Container) {
+	print("Add Item button clicked\n")
+	currentState.CurrentMenuState = "AddItem"
+	showInventory(mainContent)
+}
+
 func main() {
-	myapp := app.New()
+	myapp := app.NewWithID("mkerpclient")
 	myWindow := myapp.NewWindow("Mkerp Client")
 	setWindowDefaults(myWindow)
+
 	mainContent := container.NewStack()
 
-	showSales := func() {
-		data := [][]string{
-			{"Order #", "Amount"},
-			{"12345", "$1000"},
-			{"12346", "$500"},
-			{"12347", "$750"},
-		}
-		mainContent.Objects = []fyne.CanvasObject{
-			container.NewBorder(
-				createToolbar(),
-				nil, nil, nil,
-				container.NewBorder(
-					canvas.NewText("Sales Data", color.White),
-					nil, nil, nil,
-					createTable(data),
-				),
-			),
-		}
-		mainContent.Refresh()
-	}
-	showPurchase := func() {
-		data := [][]string{
-			{"Invoice #", "Amount"},
-			{"A100", "$300"},
-			{"A101", "$450"},
-			{"A102", "$200"},
-		}
-		mainContent.Objects = []fyne.CanvasObject{
-			container.NewBorder(
-				createToolbar(),
-				nil, nil, nil,
-				container.NewBorder(
-					canvas.NewText("Purchase Data", color.White),
-					nil, nil, nil,
-					createTable(data),
-				),
-			),
-		}
-		mainContent.Refresh()
-	}
-	showInventory := func() {
-		data := [][]string{
-			{"Item", "Stock"},
-			{"Widget A", "50"},
-			{"Widget B", "20"},
-			{"Widget C", "0"},
-		}
-
-		mainContent.Objects = []fyne.CanvasObject{
-
-			container.NewBorder(
-				createToolbar(),
-				nil, nil, nil,
-				container.NewBorder(
-					canvas.NewText("Inventory Data", color.White),
-					nil, nil, nil,
-					container.NewStack(createTable(data)),
-				),
-			),
-		}
-
-		mainContent.Refresh()
-	}
+	showSales(mainContent)
+	showPurchase(mainContent)
+	showInventory(mainContent)
 
 	sidebar := container.NewVBox(
-		widget.NewButton("Sales", func() { showSales() }),
-		widget.NewButton("Purchase", func() { showPurchase() }),
-		widget.NewButton("Inventory", func() { showInventory() }),
+		widget.NewButton("Sales", func() { showSales(mainContent) }),
+		widget.NewButton("Purchase", func() { showPurchase(mainContent) }),
+		widget.NewButton("Inventory", func() { showInventory(mainContent) }),
 	)
 
-	showSales()
+	showPurchase(mainContent)
 
 	split := container.NewHSplit(sidebar, mainContent)
 	split.Offset = 0.2
