@@ -14,13 +14,13 @@ import (
 func createToolbar() *widget.Toolbar {
 	return widget.NewToolbar(
 		widget.NewToolbarAction(theme.ContentAddIcon(), func() {
-			// Add action
+			print("Add action triggered \n")
 		}),
 		widget.NewToolbarAction(theme.CheckButtonIcon(), func() {
-			// Edit action
+			print("Check action triggered \n")
 		}),
 		widget.NewToolbarAction(theme.DeleteIcon(), func() {
-			// Delete action
+			print("Delete action triggered \n")
 		}),
 	)
 }
@@ -50,7 +50,6 @@ func setWindowDefaults(w fyne.Window) {
 func main() {
 	myapp := app.New()
 	myWindow := myapp.NewWindow("Mkerp Client")
-	//myWindow.Resize(fyne.NewSize(800, 600))
 	setWindowDefaults(myWindow)
 	mainContent := container.NewStack()
 
@@ -63,9 +62,13 @@ func main() {
 		}
 		mainContent.Objects = []fyne.CanvasObject{
 			container.NewBorder(
-				canvas.NewText("Sales Data", color.White),
+				createToolbar(),
 				nil, nil, nil,
-				createTable(data),
+				container.NewBorder(
+					canvas.NewText("Sales Data", color.White),
+					nil, nil, nil,
+					createTable(data),
+				),
 			),
 		}
 		mainContent.Refresh()
@@ -79,9 +82,13 @@ func main() {
 		}
 		mainContent.Objects = []fyne.CanvasObject{
 			container.NewBorder(
-				canvas.NewText("Purchase Data", color.White),
+				createToolbar(),
 				nil, nil, nil,
-				createTable(data),
+				container.NewBorder(
+					canvas.NewText("Purchase Data", color.White),
+					nil, nil, nil,
+					createTable(data),
+				),
 			),
 		}
 		mainContent.Refresh()
