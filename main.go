@@ -225,6 +225,25 @@ func showAddItem(mainContent *fyne.Container) {
 	showInventory(mainContent)
 }
 
+func getPurchaseData(state string) ([][]string, string) {
+	purchData := [][]string{
+		{"Invoice #", "Amount"},
+		{"A100", "$300"},
+		{"A101", "$450"},
+		{"A102", "$200"},
+	}
+	supplierData := [][]string{
+		{"Supplier ID", "Name"},
+		{"C001", "Supplier A"},
+		{"C002", "Supplier B"},
+		{"C003", "Supplier C"},
+	}
+	if state == "Suppliers" {
+		return supplierData, "Supplier Data"
+	}
+	return purchData, "Purchase Data"
+}
+
 func main() {
 	myapp := app.NewWithID("mkerpclient")
 	myWindow := myapp.NewWindow("Mkerp Client")
