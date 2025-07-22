@@ -1,17 +1,15 @@
 package main
 
 import (
-	"image/color"
+	"mkerpclient/ui"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
-	"fyne.io/fyne/v2/widget"
 )
 
-type CurrentMenuState struct {
+/*type CurrentMenuState struct {
 	CurrentMenuState string
 }
 
@@ -178,7 +176,7 @@ func createTable(data *[][]string) *widget.Table {
 	table.SetColumnWidth(0, 120)
 	table.SetColumnWidth(1, 120)
 	return table
-}
+}*/
 
 func setWindowDefaults(w fyne.Window) {
 	w.SetMaster()
@@ -189,6 +187,7 @@ func setWindowDefaults(w fyne.Window) {
 	w.SetIcon(theme.FyneLogo())
 }
 
+/*
 func showSalesOrders(mainContent *fyne.Container) {
 	print("Sales Orders button clicked\n")
 	setMenuState("SalesOrders")
@@ -246,7 +245,7 @@ func getPurchaseData(state string) ([][]string, string) {
 
 func setMenuState(state string) {
 	currentState.CurrentMenuState = state
-}
+}*/
 
 func main() {
 	myapp := app.NewWithID("mkerpclient")
@@ -259,13 +258,14 @@ func main() {
 	//showPurchase(mainContent)
 	//showInventory(mainContent)
 
-	sidebar := container.NewVBox(
+	/*sidebar := container.NewVBox(
 		widget.NewButton("Sales", func() { showSales(mainContent) }),
 		widget.NewButton("Purchase", func() { showPurchase(mainContent) }),
 		widget.NewButton("Inventory", func() { showInventory(mainContent) }),
-	)
+	)*/
+	sidebar := ui.BuildSidebar(mainContent)
 
-	showPurchase(mainContent)
+	ui.ShowPurchase(mainContent)
 
 	split := container.NewHSplit(sidebar, mainContent)
 	split.Offset = 0.2
