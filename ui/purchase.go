@@ -11,29 +11,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-/*func ShowPurchase(mainContent *fyne.Container) {
-	//data, title := data.GetPurchaseData(state.GetMenuState())
-	print("Purchase Orders button clicked\n")
-	//setMenuState("PurchaseOrders")
-	state.SetMenuState("PurchaseOrders")
-	showPurchase(mainContent)
-}*/
-
 func ShowPurchase(mainContent *fyne.Container) {
-	/*purchData := [][]string{
-		{"Invoice #", "Amount"},
-		{"A100", "$300"},
-		{"A101", "$450"},
-		{"A102", "$200"},
-	}
-	supplierData := [][]string{
-		{"Supplier ID", "Name"},
-		{"C001", "Supplier A"},
-		{"C002", "Supplier B"},
-		{"C003", "Supplier C"},
-	}*/
-	//state.SetMenuState("PurchaseOrders")
-
 	purchaseTopBar := container.NewVBox(
 		widget.NewButton("Purchase Orders", func() { ShowPurchaseOrders(mainContent) }),
 		widget.NewButton("Suppliers", func() { ShowSuppliers(mainContent) }),
@@ -41,13 +19,6 @@ func ShowPurchase(mainContent *fyne.Container) {
 
 	var data [][]string
 	var title string
-	/*if state.GetMenuState() == "Suppliers" {
-		data = supplierData
-		title = "Supplier Data"
-	} else {
-		data = purchData
-		title = "Purchase Data"
-	}*/
 
 	data, title = datafetch.GetPurchaseData(state.GetMenuState())
 
@@ -71,14 +42,12 @@ func ShowPurchase(mainContent *fyne.Container) {
 
 func ShowSuppliers(mainContent *fyne.Container) {
 	print("Suppliers button clicked\n")
-	//setMenuState("Suppliers")
 	state.SetMenuState("Suppliers")
 	ShowPurchase(mainContent)
 }
 
 func ShowPurchaseOrders(mainContent *fyne.Container) {
 	print("Purchase Orders button clicked\n")
-	//setMenuState("PurchaseOrders")
 	state.SetMenuState("PurchaseOrders")
 	ShowPurchase(mainContent)
 }

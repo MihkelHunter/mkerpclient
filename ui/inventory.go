@@ -12,15 +12,9 @@ import (
 )
 
 func ShowInventory(mainContent *fyne.Container) {
-	/*itemData := [][]string{
-		{"Item", "Stock"},
-		{"Widget A", "50"},
-		{"Widget B", "20"},
-		{"Widget C", "0"},
-	}*/
-
-	//state.SetMenuState("StockCheck")
-
+	if state.GetMenuState() == "" || state.GetMenuState() == "PurchaseOrders" {
+		state.SetMenuState("StockCheck")
+	}
 	inventoryTopBar := container.NewVBox(
 		widget.NewButton("Stock Check", func() { ShowStockCheck(mainContent) }),
 		widget.NewButton("Add Item", func() { ShowAddItem(mainContent) }),
@@ -28,13 +22,6 @@ func ShowInventory(mainContent *fyne.Container) {
 
 	var data [][]string
 	var title string
-	/*if currentState.CurrentMenuState == "StockCheck" {
-		data = itemData
-		title = "Stock Check Data"
-	} else {
-		data = itemData
-		title = "Add Item Data"
-	}*/
 
 	data, title = datafetch.GetInventoryData(state.GetMenuState())
 
@@ -58,14 +45,12 @@ func ShowInventory(mainContent *fyne.Container) {
 
 func ShowStockCheck(mainContent *fyne.Container) {
 	print("Stock Check button clicked\n")
-	//setMenuState("StockCheck")
 	state.SetMenuState("StockCheck")
 	ShowInventory(mainContent)
 }
 
 func ShowAddItem(mainContent *fyne.Container) {
 	print("Add Item button clicked\n")
-	//setMenuState("AddItem")
 	state.SetMenuState("AddItem")
 	ShowInventory(mainContent)
 }

@@ -47,14 +47,12 @@ func ShowSales(mainContent *fyne.Container) {
 
 func ShowSalesOrders(mainContent *fyne.Container) {
 	print("Sales Orders button clicked\n")
-	//setMenuState("SalesOrders")
 	state.SetMenuState("SalesOrders")
 	ShowSales(mainContent)
 }
 
 func ShowClientList(mainContent *fyne.Container) {
 	print("Client List button clicked\n")
-	//setMenuState("ClientList")
 	state.SetMenuState("ClientList")
 	ShowSales(mainContent)
 }
