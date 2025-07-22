@@ -191,37 +191,37 @@ func setWindowDefaults(w fyne.Window) {
 
 func showSalesOrders(mainContent *fyne.Container) {
 	print("Sales Orders button clicked\n")
-	currentState.CurrentMenuState = "SalesOrders"
+	setMenuState("SalesOrders")
 	showSales(mainContent)
 }
 
 func showClientList(mainContent *fyne.Container) {
 	print("Client List button clicked\n")
-	currentState.CurrentMenuState = "ClientList"
+	setMenuState("ClientList")
 	showSales(mainContent)
 }
 
 func showPurchaseOrders(mainContent *fyne.Container) {
 	print("Purchase Orders button clicked\n")
-	currentState.CurrentMenuState = "PurchaseOrders"
+	setMenuState("PurchaseOrders")
 	showPurchase(mainContent)
 }
 
 func showSuppliers(mainContent *fyne.Container) {
 	print("Suppliers button clicked\n")
-	currentState.CurrentMenuState = "Suppliers"
+	setMenuState("Suppliers")
 	showPurchase(mainContent)
 }
 
 func showStockCheck(mainContent *fyne.Container) {
 	print("Stock Check button clicked\n")
-	currentState.CurrentMenuState = "StockCheck"
+	setMenuState("StockCheck")
 	showInventory(mainContent)
 }
 
 func showAddItem(mainContent *fyne.Container) {
 	print("Add Item button clicked\n")
-	currentState.CurrentMenuState = "AddItem"
+	setMenuState("AddItem")
 	showInventory(mainContent)
 }
 
@@ -244,6 +244,10 @@ func getPurchaseData(state string) ([][]string, string) {
 	return purchData, "Purchase Data"
 }
 
+func setMenuState(state string) {
+	currentState.CurrentMenuState = state
+}
+
 func main() {
 	myapp := app.NewWithID("mkerpclient")
 	myWindow := myapp.NewWindow("Mkerp Client")
@@ -251,9 +255,9 @@ func main() {
 
 	mainContent := container.NewStack()
 
-	showSales(mainContent)
-	showPurchase(mainContent)
-	showInventory(mainContent)
+	//showSales(mainContent)
+	//showPurchase(mainContent)
+	//showInventory(mainContent)
 
 	sidebar := container.NewVBox(
 		widget.NewButton("Sales", func() { showSales(mainContent) }),
