@@ -22,10 +22,10 @@ func ShowSales(mainContent *fyne.Container) {
 		widget.NewButton("Client List", func() { ShowClientList(mainContent) }),
 	)
 
-	var data [][]string
-	var title string
-
-	data, title = datafetch.GetSalesData(state.GetMenuState())
+	data, title, err := datafetch.GetSalesData(state.GetMenuState())
+	if err != nil {
+		println("Error fetching sales data:", err)
+	}
 
 	mainContent.Objects = []fyne.CanvasObject{
 		container.NewBorder(

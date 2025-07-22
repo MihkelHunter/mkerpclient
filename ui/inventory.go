@@ -20,10 +20,10 @@ func ShowInventory(mainContent *fyne.Container) {
 		widget.NewButton("Add Item", func() { ShowAddItem(mainContent) }),
 	)
 
-	var data [][]string
-	var title string
-
-	data, title = datafetch.GetInventoryData(state.GetMenuState())
+	data, title, err := datafetch.GetInventoryData(state.GetMenuState())
+	if err != nil {
+		println("Error fetching inventory data:", err)
+	}
 
 	mainContent.Objects = []fyne.CanvasObject{
 		container.NewBorder(

@@ -1,6 +1,8 @@
 package datafetch
 
-func GetPurchaseData(state string) ([][]string, string) {
+import "errors"
+
+func GetPurchaseData(state string) ([][]string, string, error) {
 	purchData := [][]string{
 		{"Invoice #", "Amount"},
 		{"A100", "$300"},
@@ -14,12 +16,15 @@ func GetPurchaseData(state string) ([][]string, string) {
 		{"C003", "Supplier C"},
 	}
 	if state == "Suppliers" {
-		return supplierData, "Supplier Data"
+		return supplierData, "Supplier Data", nil
 	}
-	return purchData, "Purchase Data"
+	if state == "PurchaseOrders" {
+		return purchData, "Purchase Data", nil
+	}
+	return [][]string{}, "Unknown state: " + state, errors.New("error: unknown state")
 }
 
-func GetInventoryData(state string) ([][]string, string) {
+func GetInventoryData(state string) ([][]string, string, error) {
 	itemData := [][]string{
 		{"Item", "Stock"},
 		{"Widget A", "50"},
@@ -27,12 +32,16 @@ func GetInventoryData(state string) ([][]string, string) {
 		{"Widget C", "0"},
 	}
 	if state == "StockCheck" {
-		return itemData, "Stock Check data"
+		return itemData, "Stock Check data", nil
 	}
-	return itemData, "Add Item Data"
+	if state == "AddItem" {
+		return itemData, "Add Item data", nil
+	}
+
+	return [][]string{}, "Unknown state: " + state, errors.New("error: unknown state")
 }
 
-func GetSalesData(state string) ([][]string, string) {
+func GetSalesData(state string) ([][]string, string, error) {
 	salesData := [][]string{
 		{"Order #", "Amount"},
 		{"12345", "$1000"},
@@ -47,11 +56,11 @@ func GetSalesData(state string) ([][]string, string) {
 		{"4", "Meta"},
 	}
 	if state == "SalesOrders" {
-		return salesData, "Sales Orders Data"
+		return salesData, "Sales Orders Data", nil
 	}
 	if state == "ClientList" {
-		return clientList, "Client List Data"
+		return clientList, "Client List Data", nil
 	}
 
-	return [][]string{}, "Unknown state: " + state
+	return [][]string{}, "Unknown state: " + state, errors.New("error: unknown state")
 }

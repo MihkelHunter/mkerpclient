@@ -17,10 +17,10 @@ func ShowPurchase(mainContent *fyne.Container) {
 		widget.NewButton("Suppliers", func() { ShowSuppliers(mainContent) }),
 	)
 
-	var data [][]string
-	var title string
-
-	data, title = datafetch.GetPurchaseData(state.GetMenuState())
+	data, title, err := datafetch.GetPurchaseData(state.GetMenuState())
+	if err != nil {
+		println("Error fetching purchase data:", err)
+	}
 
 	mainContent.Objects = []fyne.CanvasObject{
 		container.NewBorder(
