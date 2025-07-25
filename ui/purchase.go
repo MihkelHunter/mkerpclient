@@ -30,7 +30,7 @@ func ShowPurchase(mainContent *fyne.Container) {
 				purchaseTopBar,
 				nil, nil, nil,
 				container.NewBorder(
-					canvas.NewText(title, color.White),
+					canvas.NewText(title, color.Black),
 					nil, nil, nil,
 					container.NewVScroll(CreateTable(&data)),
 				),
