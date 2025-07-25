@@ -15,7 +15,7 @@ func ShowInventory(mainContent *fyne.Container) {
 	if state.GetMenuState() == "" || state.GetMenuState() == "PurchaseOrders" {
 		state.SetMenuState("StockCheck")
 	}
-	inventoryTopBar := container.NewVBox(
+	inventoryTopBar := container.NewHBox(
 		widget.NewButton("Stock Check", func() { ShowStockCheck(mainContent) }),
 		widget.NewButton("Add Item", func() { ShowAddItem(mainContent) }),
 	)

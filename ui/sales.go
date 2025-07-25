@@ -8,6 +8,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -17,9 +18,10 @@ func ShowSales(mainContent *fyne.Container) {
 		state.SetMenuState("SalesOrders")
 	}
 
-	salesTopBar := container.NewVBox(
+	salesTopBar := container.NewHBox(
 		widget.NewButton("Sales Orders", func() { ShowSalesOrders(mainContent) }),
 		widget.NewButton("Client List", func() { ShowClientList(mainContent) }),
+		layout.NewSpacer(),
 	)
 
 	data, title, err := datafetch.GetSalesData(state.GetMenuState())

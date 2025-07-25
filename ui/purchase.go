@@ -12,7 +12,7 @@ import (
 )
 
 func ShowPurchase(mainContent *fyne.Container) {
-	purchaseTopBar := container.NewVBox(
+	purchaseTopBar := container.NewHBox(
 		widget.NewButton("Purchase Orders", func() { ShowPurchaseOrders(mainContent) }),
 		widget.NewButton("Suppliers", func() { ShowSuppliers(mainContent) }),
 	)
